@@ -107,7 +107,7 @@ Released under the MIT licence: http://opensource.org/licenses/mit-license
                 ref1 = payload.data;
                 for (l = 0, len2 = ref1.length; l < len2; l++) {
                   repo = ref1[l];
-                  if ((!opts.forks && repo.fork) || (ref2 = repo.name.toLowerCase(), indexOf.call(siteRepoNames, ref2) >= 0) || !repo.description) {
+                  if ((!opts.forks && repo.fork) || (!opts.siterepos && (ref2 = repo.name.toLowerCase(), indexOf.call(siteRepoNames, ref2) >= 0)) || !repo.description) {
                     continue;
                   }
                   repos.push(repo);
