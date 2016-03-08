@@ -40,7 +40,7 @@ init = ->
             userName = first_repo.owner.login
             siteRepoNames = ["#{userName}.github.com".toLowerCase(), "#{userName}.github.io".toLowerCase()]
             for repo in payload.data
-              continue if (not opts.forks and repo.fork) or repo.name.toLowerCase() in siteRepoNames or not repo.description
+              continue if (not opts.forks and repo.fork) or (not opts.siterepos and repo.name.toLowerCase() in siteRepoNames) or not repo.description
               repos.push repo
             userCount++
             if userCount is users.length
