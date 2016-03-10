@@ -6,8 +6,9 @@ java -jar /usr/local/closure-compiler/compiler.jar \
   --js_output_file github-widget.min.js
 ###
 
-###* @preserve https://github.com/jawj/github-widget
-Copyright (c) 2011 - 2012 George MacKerron
+###* @preserve https://github.com/NateShoffner/github-widget
+Original work Copyright (c) 2011 - 2012 George MacKerron
+Modified work Copyright (c) 2016 Nate Shoffner
 Released under the MIT licence: http://opensource.org/licenses/mit-license ###
 makeWidget = (repos, div) ->
   make cls: 'gw-clearer', prevSib: div
