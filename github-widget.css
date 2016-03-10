@@ -18,6 +18,7 @@
 }
 .gw-name {
   font-weight: bold;
+  word-wrap: break-word;
 }
 .gw-stats {
   display: inline-block;
