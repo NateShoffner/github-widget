@@ -15,7 +15,7 @@ Released under the MIT licence: http://opensource.org/licenses/mit-license
  */
 
 (function() {
-  var cls, get, init, jsonp, make, makeWidget, text,
+  var cls, datetimeRegex, get, init, jsonp, make, makeWidget, text,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
     hasProp = {}.hasOwnProperty;
 
@@ -74,6 +74,8 @@ Released under the MIT licence: http://opensource.org/licenses/mit-license
     return results;
   };
 
+  datetimeRegex = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/;
+
   init = function() {
     var div, i, len, ref, results;
     ref = get({
@@ -113,10 +115,16 @@ Released under the MIT licence: http://opensource.org/licenses/mit-license
                   repos.push(repo);
                 }
                 userCount++;
-                if (userCount === users.length) {
-                  repos = repos.sort(function(a, b) {
-                    return b[sortBy] - a[sortBy];
-                  });
+                if (userCount === users.length && repos.length > 0) {
+                  if (datetimeRegex.test(repos[0][sortBy])) {
+                    repos = repos.sort(function(a, b) {
+                      return new Date(b[sortBy]) - new Date(a[sortBy]);
+                    });
+                  } else {
+                    repos = repos.sort(function(a, b) {
+                      return b[sortBy] - a[sortBy];
+                    });
+                  }
                   repos = repos.slice(0, +(limit - 1) + 1 || 9e9);
                   return makeWidget(repos, div);
                 }

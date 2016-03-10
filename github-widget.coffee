@@ -22,6 +22,8 @@ makeWidget = (repos, div) ->
         make cls: 'gw-lang', text: repo.language if repo.language?
         make cls: 'gw-repo-desc', text: repo.description]]
 
+datetimeRegex = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/
+
 init = ->
   for div in (get tag: 'div', cls: 'github-widget')
     do (div) ->  # close over correct div
@@ -43,8 +45,11 @@ init = ->
               continue if (not opts.forks and repo.fork) or (not opts.siterepos and repo.name.toLowerCase() in siteRepoNames) or not repo.description
               repos.push repo
             userCount++
-            if userCount is users.length
-              repos = repos.sort((a, b) -> b[sortBy] - a[sortBy])
+            if userCount is users.length and repos.length > 0
+              if datetimeRegex.test(repos[0][sortBy])
+                repos = repos.sort((a, b) -> new Date(b[sortBy])-new Date(a[sortBy]))
+              else
+                repos = repos.sort((a, b) -> b[sortBy] - a[sortBy])
               repos = repos[0..limit - 1]
               makeWidget repos, div
 
