@@ -26,9 +26,9 @@ Get the code
 
 If you have `git` installed, go to your website's root folder and paste in:
 
-    git clone https://github.com/jawj/github-widget.git
+    git clone https://github.com/NateShoffner/github-widget.git
 
-Alternatively, you can download an up-to-date ZIP file from [https://github.com/jawj/github-widget/zipball/master](https://github.com/jawj/github-widget/zipball/master).
+Alternatively, you can download an up-to-date ZIP file from [https://github.com/NateShoffner/github-widget/zipball/master](https://github.com/NateShoffner/github-widget/zipball/master).
 
 Set it up
 ---------
