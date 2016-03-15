@@ -45,3 +45,9 @@
 .gw-clearer {
   clear: left;
 }
+.gw-homepage {
+  margin-top: 5px;
+}
+.gw-homepage a {
+  text-decoration: none;
+}

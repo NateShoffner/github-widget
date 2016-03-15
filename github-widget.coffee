@@ -10,7 +10,7 @@ java -jar /usr/local/closure-compiler/compiler.jar \
 Original work Copyright (c) 2011 - 2012 George MacKerron
 Modified work Copyright (c) 2016 Nate Shoffner
 Released under the MIT licence: http://opensource.org/licenses/mit-license ###
-makeWidget = (repos, div) ->
+makeWidget = (repos, div, opts) ->
   make cls: 'gw-clearer', prevSib: div
   for repo in repos
     make parent: div, cls: 'gw-repo-outer', kids: [
@@ -21,7 +21,10 @@ makeWidget = (repos, div) ->
             make tag: 'li', text: repo.forks, cls: 'gw-forks']
           make tag: 'a', href: repo.html_url, text: repo.name, cls: 'gw-name']
         make cls: 'gw-lang', text: repo.language if repo.language?
-        make cls: 'gw-repo-desc', text: repo.description]]
+        make cls: 'gw-repo-desc', text: repo.description
+        if opts.show_homepages and !!repo.homepage
+          make cls: 'gw-homepage', kids: [
+            make tag: 'a', href: repo.homepage, text: 'Homepage']]]
 
 datetimeRegex = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/
 
@@ -52,7 +55,7 @@ init = ->
               else
                 repos = repos.sort((a, b) -> b[sortBy] - a[sortBy])
               repos = repos[0..limit - 1]
-              makeWidget repos, div
+              makeWidget repos, div, opts
 
 
 # support functions
