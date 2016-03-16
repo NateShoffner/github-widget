@@ -1,7 +1,7 @@
 Demo
 ====
 
-See [http://nateshoffner.com/github-widget/](http://nateshoffner.com/github-widget/) for an example of the widget in action.
+See [http://nateshoffner.github.io/github-widget/](http://nateshoffner.github.io/github-widget/) for an example of the widget in action.
 
 
 What does it do?
