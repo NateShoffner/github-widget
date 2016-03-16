@@ -30,6 +30,10 @@ datetimeRegex = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]
 
 @intialize_github_widget = ->
   for div in (get tag: 'div', cls: 'github-widget')
+      # remove existing repo nodes
+      repo_nodes = div.getElementsByClassName('gw-repo-outer')
+      while (repo_nodes[0])
+          repo_nodes[0].parentNode.removeChild(repo_nodes[0]);
     do (div) ->  # close over correct div
       users = (div.getAttribute 'data-user').split ','
       opts = div.getAttribute 'data-options'
