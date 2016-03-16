@@ -7,8 +7,8 @@ java -jar /usr/local/closure-compiler/compiler.jar \
 ###
 
 ###* @preserve https://github.com/NateShoffner/github-widget
-Original work Copyright (c) 2011 - 2012 George MacKerron
 Modified work Copyright (c) 2016 Nate Shoffner
+Original work Copyright (c) 2011 - 2012 George MacKerron
 Released under the MIT licence: http://opensource.org/licenses/mit-license ###
 makeWidget = (repos, div, opts) ->
   make cls: 'gw-clearer', prevSib: div
