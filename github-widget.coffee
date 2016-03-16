@@ -28,13 +28,16 @@ makeWidget = (repos, div, opts) ->
 
 datetimeRegex = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/
 
-@initialize_github_widget = ->
+@initialize_github_widgets = ->
   for div in (get tag: 'div', cls: 'github-widget')
+    initialize_github_widget(div)
+
+@initialize_github_widget = (div) ->
+    do (div) ->  # close over correct div
       # remove existing repo nodes
       repo_nodes = div.getElementsByClassName('gw-repo-outer')
       while (repo_nodes[0])
           repo_nodes[0].parentNode.removeChild(repo_nodes[0]);
-    do (div) ->  # close over correct div
       users = (div.getAttribute 'data-user').split ','
       opts = div.getAttribute 'data-options'
       opts = if typeof opts is 'string' then JSON.parse(opts) else {}
