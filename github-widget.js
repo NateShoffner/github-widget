@@ -10,8 +10,8 @@ java -jar /usr/local/closure-compiler/compiler.jar \
 
 
 /** @preserve https://github.com/NateShoffner/github-widget
-Original work Copyright (c) 2011 - 2012 George MacKerron
 Modified work Copyright (c) 2016 Nate Shoffner
+Original work Copyright (c) 2011 - 2012 George MacKerron
 Released under the MIT licence: http://opensource.org/licenses/mit-license
  */
 
@@ -86,21 +86,27 @@ Released under the MIT licence: http://opensource.org/licenses/mit-license
 
   datetimeRegex = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/;
 
-  this.intialize_github_widget = function() {
-    var div, i, len, ref, repo_nodes;
+  this.initialize_github_widgets = function() {
+    var div, i, len, ref, results;
     ref = get({
       tag: 'div',
       cls: 'github-widget'
     });
+    results = [];
     for (i = 0, len = ref.length; i < len; i++) {
       div = ref[i];
+      results.push(initialize_github_widget(div));
+    }
+    return results;
+  };
+
+  this.initialize_github_widget = function(div) {
+    return (function(div) {
+      var i, len, limit, opts, repo_nodes, repos, results, sortBy, url, user, userCount, users;
       repo_nodes = div.getElementsByClassName('gw-repo-outer');
       while (repo_nodes[0]) {
         repo_nodes[0].parentNode.removeChild(repo_nodes[0]);
       }
-    }
-    return (function(div) {
-      var j, len1, limit, opts, repos, results, sortBy, url, user, userCount, users;
       users = (div.getAttribute('data-user')).split(',');
       opts = div.getAttribute('data-options');
       opts = typeof opts === 'string' ? JSON.parse(opts) : {};
@@ -109,21 +115,21 @@ Released under the MIT licence: http://opensource.org/licenses/mit-license
       repos = [];
       userCount = 0;
       results = [];
-      for (j = 0, len1 = users.length; j < len1; j++) {
-        user = users[j];
+      for (i = 0, len = users.length; i < len; i++) {
+        user = users[i];
         url = "https://api.github.com/users/" + user + "/repos?callback=<cb>";
         results.push(jsonp({
           url: url,
           success: function(payload) {
-            var first_repo, l, len2, ref1, ref2, repo, siteRepoNames, userName;
+            var first_repo, j, len1, ref, ref1, repo, siteRepoNames, userName;
             if (payload.data.length > 0) {
               first_repo = payload.data[0];
               userName = first_repo.owner.login;
               siteRepoNames = [(userName + ".github.com").toLowerCase(), (userName + ".github.io").toLowerCase()];
-              ref1 = payload.data;
-              for (l = 0, len2 = ref1.length; l < len2; l++) {
-                repo = ref1[l];
-                if ((!opts.forks && repo.fork) || (!opts.siterepos && (ref2 = repo.name.toLowerCase(), indexOf.call(siteRepoNames, ref2) >= 0)) || !repo.description) {
+              ref = payload.data;
+              for (j = 0, len1 = ref.length; j < len1; j++) {
+                repo = ref[j];
+                if ((!opts.forks && repo.fork) || (!opts.siterepos && (ref1 = repo.name.toLowerCase(), indexOf.call(siteRepoNames, ref1) >= 0)) || !repo.description) {
                   continue;
                 }
                 repos.push(repo);
