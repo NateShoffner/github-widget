@@ -16,11 +16,11 @@ Released under the MIT licence: http://opensource.org/licenses/mit-license
  */
 
 (function() {
-  var cls, datetimeRegex, get, init, jsonp, make, makeWidget, text,
+  var cls, datetimeRegex, get, jsonp, make, makeWidget, text,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
     hasProp = {}.hasOwnProperty;
 
-  makeWidget = function(repos, div) {
+  makeWidget = function(repos, div, opts) {
     var i, len, repo, results;
     make({
       cls: 'gw-clearer',
@@ -66,7 +66,16 @@ Released under the MIT licence: http://opensource.org/licenses/mit-license
               }) : void 0, make({
                 cls: 'gw-repo-desc',
                 text: repo.description
-              })
+              }), opts.show_homepages && !!repo.homepage ? make({
+                cls: 'gw-homepage',
+                kids: [
+                  make({
+                    tag: 'a',
+                    href: repo.homepage,
+                    text: 'Homepage'
+                  })
+                ]
+              }) : void 0
             ]
           })
         ]
@@ -77,66 +86,68 @@ Released under the MIT licence: http://opensource.org/licenses/mit-license
 
   datetimeRegex = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/;
 
-  init = function() {
-    var div, i, len, ref, results;
+  this.intialize_github_widget = function() {
+    var div, i, len, ref, repo_nodes;
     ref = get({
       tag: 'div',
       cls: 'github-widget'
     });
-    results = [];
     for (i = 0, len = ref.length; i < len; i++) {
       div = ref[i];
-      results.push((function(div) {
-        var j, len1, limit, opts, repos, results1, sortBy, url, user, userCount, users;
-        users = (div.getAttribute('data-user')).split(',');
-        opts = div.getAttribute('data-options');
-        opts = typeof opts === 'string' ? JSON.parse(opts) : {};
-        sortBy = opts.sortBy || 'watchers';
-        limit = parseInt(opts.limit) || Infinity;
-        repos = [];
-        userCount = 0;
-        results1 = [];
-        for (j = 0, len1 = users.length; j < len1; j++) {
-          user = users[j];
-          url = "https://api.github.com/users/" + user + "/repos?callback=<cb>";
-          results1.push(jsonp({
-            url: url,
-            success: function(payload) {
-              var first_repo, l, len2, ref1, ref2, repo, siteRepoNames, userName;
-              if (payload.data.length > 0) {
-                first_repo = payload.data[0];
-                userName = first_repo.owner.login;
-                siteRepoNames = [(userName + ".github.com").toLowerCase(), (userName + ".github.io").toLowerCase()];
-                ref1 = payload.data;
-                for (l = 0, len2 = ref1.length; l < len2; l++) {
-                  repo = ref1[l];
-                  if ((!opts.forks && repo.fork) || (!opts.siterepos && (ref2 = repo.name.toLowerCase(), indexOf.call(siteRepoNames, ref2) >= 0)) || !repo.description) {
-                    continue;
-                  }
-                  repos.push(repo);
+      repo_nodes = div.getElementsByClassName('gw-repo-outer');
+      while (repo_nodes[0]) {
+        repo_nodes[0].parentNode.removeChild(repo_nodes[0]);
+      }
+    }
+    return (function(div) {
+      var j, len1, limit, opts, repos, results, sortBy, url, user, userCount, users;
+      users = (div.getAttribute('data-user')).split(',');
+      opts = div.getAttribute('data-options');
+      opts = typeof opts === 'string' ? JSON.parse(opts) : {};
+      sortBy = opts.sortBy || 'watchers';
+      limit = parseInt(opts.limit) || Infinity;
+      repos = [];
+      userCount = 0;
+      results = [];
+      for (j = 0, len1 = users.length; j < len1; j++) {
+        user = users[j];
+        url = "https://api.github.com/users/" + user + "/repos?callback=<cb>";
+        results.push(jsonp({
+          url: url,
+          success: function(payload) {
+            var first_repo, l, len2, ref1, ref2, repo, siteRepoNames, userName;
+            if (payload.data.length > 0) {
+              first_repo = payload.data[0];
+              userName = first_repo.owner.login;
+              siteRepoNames = [(userName + ".github.com").toLowerCase(), (userName + ".github.io").toLowerCase()];
+              ref1 = payload.data;
+              for (l = 0, len2 = ref1.length; l < len2; l++) {
+                repo = ref1[l];
+                if ((!opts.forks && repo.fork) || (!opts.siterepos && (ref2 = repo.name.toLowerCase(), indexOf.call(siteRepoNames, ref2) >= 0)) || !repo.description) {
+                  continue;
                 }
-                userCount++;
-                if (userCount === users.length && repos.length > 0) {
-                  if (datetimeRegex.test(repos[0][sortBy])) {
-                    repos = repos.sort(function(a, b) {
-                      return new Date(b[sortBy]) - new Date(a[sortBy]);
-                    });
-                  } else {
-                    repos = repos.sort(function(a, b) {
-                      return b[sortBy] - a[sortBy];
-                    });
-                  }
-                  repos = repos.slice(0, +(limit - 1) + 1 || 9e9);
-                  return makeWidget(repos, div);
+                repos.push(repo);
+              }
+              userCount++;
+              if (userCount === users.length && repos.length > 0) {
+                if (datetimeRegex.test(repos[0][sortBy])) {
+                  repos = repos.sort(function(a, b) {
+                    return new Date(b[sortBy]) - new Date(a[sortBy]);
+                  });
+                } else {
+                  repos = repos.sort(function(a, b) {
+                    return b[sortBy] - a[sortBy];
+                  });
                 }
+                repos = repos.slice(0, +(limit - 1) + 1 || 9e9);
+                return makeWidget(repos, div, opts);
               }
             }
-          }));
-        }
-        return results1;
-      })(div));
-    }
-    return results;
+          }
+        }));
+      }
+      return results;
+    })(div);
   };
 
   cls = function(el, opts) {
@@ -266,7 +277,5 @@ Released under the MIT licence: http://opensource.org/licenses/mit-license
   jsonp.callbackNum = 0;
 
   jsonp.noop = function() {};
-
-  init();
 
 }).call(this);
