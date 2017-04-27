@@ -20,7 +20,7 @@ makeWidget = (repos, div, opts) ->
             make tag: 'li', text: repo.watchers, cls: 'gw-watchers'
             make tag: 'li', text: repo.forks, cls: 'gw-forks']
           make tag: 'a', href: repo.html_url, text: repo.name, cls: 'gw-name']
-        make cls: 'gw-lang', text: repo.language if repo.language?
+        make cls: 'gw-lang', text: if repo.language? then repo.language else "Unknown Language"
         make cls: 'gw-repo-desc', text: if repo.description? then repo.description else "No description available"
         if opts.show_homepages and !!repo.homepage
           make cls: 'gw-homepage', kids: [
