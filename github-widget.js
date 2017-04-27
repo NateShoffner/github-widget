@@ -60,12 +60,12 @@ Released under the MIT licence: http://opensource.org/licenses/mit-license
                     cls: 'gw-name'
                   })
                 ]
-              }), repo.language != null ? make({
+              }), make({
                 cls: 'gw-lang',
-                text: repo.language
-              }) : void 0, make({
+                text: repo.language != null ? repo.language : "Unknown Language"
+              }), make({
                 cls: 'gw-repo-desc',
-                text: repo.description
+                text: repo.description != null ? repo.description : "No description available"
               }), opts.show_homepages && !!repo.homepage ? make({
                 cls: 'gw-homepage',
                 kids: [
@@ -129,7 +129,7 @@ Released under the MIT licence: http://opensource.org/licenses/mit-license
               ref = payload.data;
               for (j = 0, len1 = ref.length; j < len1; j++) {
                 repo = ref[j];
-                if ((!opts.forks && repo.fork) || (!opts.siterepos && (ref1 = repo.name.toLowerCase(), indexOf.call(siteRepoNames, ref1) >= 0)) || !repo.description) {
+                if ((!opts.forks && repo.fork) || (!opts.siterepos && (ref1 = repo.name.toLowerCase(), indexOf.call(siteRepoNames, ref1) >= 0))) {
                   continue;
                 }
                 repos.push(repo);
