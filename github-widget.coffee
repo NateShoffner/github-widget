@@ -21,7 +21,7 @@ makeWidget = (repos, div, opts) ->
             make tag: 'li', text: repo.forks, cls: 'gw-forks']
           make tag: 'a', href: repo.html_url, text: repo.name, cls: 'gw-name']
         make cls: 'gw-lang', text: repo.language if repo.language?
-        make cls: 'gw-repo-desc', text: repo.description if repo.description?
+        make cls: 'gw-repo-desc', text: if repo.description? then repo.description else "No description available"
         if opts.show_homepages and !!repo.homepage
           make cls: 'gw-homepage', kids: [
             make tag: 'a', href: repo.homepage, text: 'Homepage']]]
@@ -53,7 +53,7 @@ datetimeRegex = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]
             userName = first_repo.owner.login
             siteRepoNames = ["#{userName}.github.com".toLowerCase(), "#{userName}.github.io".toLowerCase()]
             for repo in payload.data
-              continue if (not opts.forks and repo.fork) or (not opts.siterepos and repo.name.toLowerCase() in siteRepoNames) or not repo.description
+              continue if (not opts.forks and repo.fork) or (not opts.siterepos and repo.name.toLowerCase() in siteRepoNames)
               repos.push repo
             userCount++
             if userCount is users.length and repos.length > 0
