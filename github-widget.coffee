@@ -21,7 +21,7 @@ makeWidget = (repos, div, opts) ->
             make tag: 'li', text: repo.forks, cls: 'gw-forks']
           make tag: 'a', href: repo.html_url, text: repo.name, cls: 'gw-name']
         make cls: 'gw-lang', text: repo.language if repo.language?
-        make cls: 'gw-repo-desc', text: repo.description
+        make cls: 'gw-repo-desc', text: repo.description if repo.description?
         if opts.show_homepages and !!repo.homepage
           make cls: 'gw-homepage', kids: [
             make tag: 'a', href: repo.homepage, text: 'Homepage']]]
