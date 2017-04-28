@@ -42,13 +42,13 @@
 
             <div class="checkbox">
               <label>
-                <input type="checkbox" id="include-site-repos"> Include GitHub Pages repositories
+                <input type="checkbox" id="include-pages"> Include GitHub Pages repositories
               </label>
             </div>
 
             <div class="checkbox">
               <label>
-                <input type="checkbox" id="display-homepages"> Display project homepages 
+                <input type="checkbox" id="display-websites"> Display project websites
               </label>
             </div>
 
@@ -83,15 +83,15 @@
             var limit = document.getElementById("limit").value;
             var sortSelection  = document.getElementById("sortBy");
             var sortBy = sortSelection.options[sortSelection.selectedIndex].text;
-            var includeSiteRepos = document.getElementById("include-site-repos").checked;
-            var displayHomepages = document.getElementById("display-homepages").checked;
+            var includePages = document.getElementById("include-pages").checked;
+            var websiteLinks = document.getElementById("display-websites").checked;
 
             var opts = new Object();
             if (limit > 0)
                 opts.limit = limit;
             opts.sortBy = sortBy;
-            opts.siterepos = includeSiteRepos;
-            opts.show_homepages = displayHomepages;
+            opts.pages = includePages;
+            opts.websiteLinks = websiteLinks;
 
             feedDiv.setAttribute('data-user', username);
             feedDiv.setAttribute('data-options', JSON.stringify(opts));
