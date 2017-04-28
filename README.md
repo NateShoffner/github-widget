@@ -11,7 +11,7 @@ It lets you show an up-to-date list of one or more users' GitHub repositories on
 
 It pulls the data from the GitHub JSON-P API, builds some simple HTML from it, and styles this with CSS.
 
-By default, it ignores: forks; any GitHub home page repo (username.github.com/username.github.io); and any repo with no description. It sorts what's left by descending number of watchers (now 'stars').
+By default, it ignores forks and GitHub Pages repos (user/orginization/project). It sorts what's left by descending number of watchers (now 'stars').
 
 It works back to IE6 (though some of the styling is ugly there, and it's not super-relevant, given that GitHub doesn't).
 
@@ -41,16 +41,17 @@ At any page location where you want to show a GitHub repository, paste in:
 
     <div class="github-widget" data-user="some-github-username"></div>
 
-Replacing the value of the `data-user` attribute with an actual GitHub username or usernames, separated by commas.
+Replace the value of the `data-user` attribute with an actual GitHub username or usernames, separated by commas.
 
 You may include additional options in the form of a JSON hash in an attribute called `data-options`
-and the following options are currently supported: `sortBy`, `limit`, `forks`, and `siterepos`.
+and the following options are currently supported: `sortBy`, `limit`, `forks`, `pages`, and `websiteLinks`.
 
     <div class="github-widget" data-user="some-github-username" data-options='{"sortBy":"stargazers_count", "limit":6}'></div>
 
 Finally, immediately before the closing `</body>` tag, add:
 
     <script src="github-widget/github-widget.min.js"></script>
+    <script type="text/javascript">initialize_github_widgets();</script>
 
 
 Customise it

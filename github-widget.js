@@ -66,7 +66,7 @@ Released under the MIT licence: http://opensource.org/licenses/mit-license
               }), make({
                 cls: 'gw-repo-desc',
                 text: repo.description != null ? repo.description : "No description available"
-              }), opts.show_homepages && !!repo.homepage ? make({
+              }), opts.websiteLinks && (repo.homepage != null) ? make({
                 cls: 'gw-homepage',
                 kids: [
                   make({
@@ -129,7 +129,7 @@ Released under the MIT licence: http://opensource.org/licenses/mit-license
               ref = payload.data;
               for (j = 0, len1 = ref.length; j < len1; j++) {
                 repo = ref[j];
-                if ((!opts.forks && repo.fork) || (!opts.siterepos && (ref1 = repo.name.toLowerCase(), indexOf.call(siteRepoNames, ref1) >= 0))) {
+                if ((!opts.forks && repo.fork) || (!opts.pages && (ref1 = repo.name.toLowerCase(), indexOf.call(siteRepoNames, ref1) >= 0))) {
                   continue;
                 }
                 repos.push(repo);
