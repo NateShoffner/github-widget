@@ -102,7 +102,7 @@ Released under the MIT licence: http://opensource.org/licenses/mit-license
 
   this.initialize_github_widget = function(div) {
     return (function(div) {
-      var i, len, limit, opts, repo_nodes, repos, results, sortBy, url, user, userCount, users;
+      var i, len, limit, opts, per_page, repo_nodes, repos, results, sortBy, url, user, userCount, users;
       repo_nodes = div.getElementsByClassName('gw-repo-outer');
       while (repo_nodes[0]) {
         repo_nodes[0].parentNode.removeChild(repo_nodes[0]);
@@ -112,12 +112,13 @@ Released under the MIT licence: http://opensource.org/licenses/mit-license
       opts = typeof opts === 'string' ? JSON.parse(opts) : {};
       sortBy = opts.sortBy || 'watchers';
       limit = parseInt(opts.limit) || Infinity;
+      per_page = parseInt(opts.per_page) || 100;
       repos = [];
       userCount = 0;
       results = [];
       for (i = 0, len = users.length; i < len; i++) {
         user = users[i];
-        url = "https://api.github.com/users/" + user + "/repos?callback=<cb>";
+        url = ("https://api.github.com/users/" + user + "/repos?callback=<cb>&per_page=") + per_page;
         results.push(jsonp({
           url: url,
           success: function(payload) {

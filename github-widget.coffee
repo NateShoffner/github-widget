@@ -43,10 +43,11 @@ datetimeRegex = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]
       opts = if typeof opts is 'string' then JSON.parse(opts) else {}
       sortBy = opts.sortBy or 'watchers'
       limit = parseInt(opts.limit) or Infinity
+      per_page = parseInt(opts.per_page) or 100
       repos = []
       userCount = 0
       for user in users
-        url = "https://api.github.com/users/#{user}/repos?callback=<cb>"
+        url = "https://api.github.com/users/#{user}/repos?callback=<cb>&per_page=" + per_page
         jsonp url: url, success: (payload) ->
           if payload.data.length > 0
             first_repo = payload.data[0]
