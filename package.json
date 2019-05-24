@@ -1,0 +1,19 @@
+{
+  "name": "ns-github-widget",
+  "version": "1.0.0",
+  "description": " Simple script to display own GitHub projects on a webpage.",
+  "main": "github-widget.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NateShoffner/github-widget.git"
+  },
+  "keywords": [
+    "github"
+  ],
+  "author": "Nate Shoffner",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NateShoffner/github-widget/issues"
+  },
+  "homepage": "https://github.com/NateShoffner/github-widget#readme"
+}
